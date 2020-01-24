@@ -9,15 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-
-    <modules>
-        <module>BIO</module>
-        <module>FakeAsyncIO</module>
-        <module>NIO</module>
-        <module>AIO</module>
-    </modules>
-
-    <artifactId>javaIo</artifactId>
+    <artifactId>linuxIO</artifactId>
 
 
 </project>

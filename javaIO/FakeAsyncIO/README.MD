@@ -3,6 +3,7 @@
 - bio一个链路需要一个线程
 - 改进成了线程池处理多个client请求
 
+![avatar](../../images/fakeBIO.png)
 
 `缺陷的本质`
 - java同步的API

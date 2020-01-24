@@ -9,15 +9,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>AIO</artifactId>
 
-    <modules>
-        <module>BIO</module>
-        <module>FakeAsyncIO</module>
-        <module>NIO</module>
-        <module>AIO</module>
-    </modules>
+    <dependencies>
 
-    <artifactId>javaIo</artifactId>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.0</version>
+        </dependency>
 
-
+    </dependencies>
 </project>
