@@ -1,3 +1,5 @@
+package bio;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,11 +14,11 @@ import java.util.Date;
 public class TimeserverHandler implements Runnable {
 
 
+
     private Socket socket;
     public TimeserverHandler(Socket socket) {
         this.socket = socket;
     }
-    @Override
     public void run(){
         BufferedReader in = null;
         PrintWriter out = null;

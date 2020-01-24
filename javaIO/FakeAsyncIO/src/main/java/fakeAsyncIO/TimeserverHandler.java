@@ -1,3 +1,5 @@
+package fakeAsyncIO;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,7 +18,6 @@ public class TimeserverHandler implements Runnable {
     public TimeserverHandler(Socket socket) {
         this.socket = socket;
     }
-    @Override
     public void run(){
         BufferedReader in = null;
         PrintWriter out = null;
