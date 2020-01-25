@@ -1,0 +1,4 @@
+# AbstractQueuedSynchronizer
+
+java.util.concurrent包中很多类都依赖于这个类所提供队列式同步器，比如说常用的ReentranLock，Semaphore和CountDownLatch等
+

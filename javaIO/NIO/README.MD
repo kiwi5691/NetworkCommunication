@@ -5,7 +5,7 @@
 - 在java代码中提供了高速,面向块I/O
 - 通过定义包含数据的类，以块的形式处理
 
-##NIO核心API Channel, Buffer, Selector
+## NIO核心API Channel, Buffer, Selector
 
 #### 通道Channel
 NIO的通道类似于流，但有些区别

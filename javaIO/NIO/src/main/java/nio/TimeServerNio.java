@@ -113,7 +113,7 @@ public class TimeServerNio {
                     readBuffer.flip();
                     byte[] bytes = new byte[readBuffer.remaining()];
                     readBuffer.get(bytes);
-                    //10.对消息解码
+                    //10.获取
                     String body = new String(bytes,"UTF-8");
                     System.out.println("the time server receive order:"+body);
                     doWrite(sc,"the time server receive order:"+body);

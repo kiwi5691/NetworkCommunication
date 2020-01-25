@@ -30,7 +30,7 @@ public class TimeClientNio {
 
     public void init(){
         try {
-            //5.创建多路复用器线程
+            //5.创建多路复用器
             selector = Selector.open();
             //1.打开SocketChannel绑定客户端本地地址
             socketChannel = SocketChannel.open();
