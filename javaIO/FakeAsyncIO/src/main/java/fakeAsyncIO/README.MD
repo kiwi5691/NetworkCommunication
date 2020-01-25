@@ -4,6 +4,10 @@
 - 服务端创建线程池
 - 线程池处理n个客户端连接
 
+- [客户端代码](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/FakeAsyncIO/src/main/java/fakeAsyncIO/TimeClient.java)
+- [Runnable代码](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/FakeAsyncIO/src/main/java/fakeAsyncIO/TimeserverHandler.java)
+- [创建线程池代码](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/FakeAsyncIO/src/main/java/fakeAsyncIO/TimeServerHandlerExcuterPool.java)
+- [服务端代码](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/FakeAsyncIO/src/main/java/fakeAsyncIO/TimeServer.java)
 
 ### 底层通信依旧是同步阻塞模型，无法从根本解决问题
 

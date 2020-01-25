@@ -24,20 +24,41 @@ JAVA并发包中java.util.concurrent有三个类用于同步一批线程的行�
 
 在某些业务场景中，程序执行需要等待某个条件完成后才能继续执行后续的操作；典型的应用如并行计算，当某个处理的运算量很大时，可以将该运算任务拆分成多个子任务，等待所有的子任务都完成之后，父任务再拿到所有子任务的运算结果进行汇总。
 
-#### 源码
-![avatar](../../../../../../../images/countdownwatch.png)
-
+#### 方法
 - countDownLatch类中只提供了一个构造器
 
-CountDownLatch内部依赖Sync实现，而Sync继承自AQS
 
 ```java
 //参数count为计数值，count是执行的线程数
 //可以在CountDownLatchTest试着把2换成1
+public CountDownLatch(int count) {}
+```
+
+
+- 类中有三个重要的方法
+
+```java
+//调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行
+public void await() throws InterruptedException { };   
+//和await()类似，只不过等待一定的时间后count值还没变为0的话就会继续执行
+public boolean await(long timeout, TimeUnit unit) throws InterruptedException { };  
+//将count值减1
+public void countDown() { };  
+```
+
+#### 源码
+![avatar](../../../../../../../images/countdownwatch.png)
+
+
+CountDownLatch内部依赖Sync实现，而Sync继承自AQS
+
+
+```java
 public CountDownLatch(int count) {
     if (count < 0) throw new IllegalArgumentException("count < 0");
     this.sync = new Sync(count);
 }
+
 ```
 
 - Sync是CountDownLatch的静态内部类
@@ -47,16 +68,11 @@ private static final class Sync extends AbstractQueuedSynchronizer {}
 ```
 
 
-- 类中有三个重要的方法
+- await
 ```java
-//调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行
 public void await() throws InterruptedException { 
     sync.acquireSharedInterruptibly(1);
 };   
-//和await()类似，只不过等待一定的时间后count值还没变为0的话就会继续执行
-public boolean await(long timeout, TimeUnit unit) throws InterruptedException { };  
-//将count值减1
-public void countDown() { };  
 ```
 
 - await()方法调用了AQS的共享式相应中断获取同步状态的方法，acquireSharedInterruptibly(int)
@@ -82,7 +98,11 @@ protected int tryAcquireShared(int acquires) {
 
 
 - countDown()方法
-
+```java
+public void countDown() {
+    sync.releaseShared(1);
+}
+```
 countDown()方法调用了AQS的releaseShared(int)方法来释放共享锁同步状态：
 ```java
 
@@ -135,6 +155,9 @@ public void run() {
 countDownLatch.await(3L, TimeUnit.SECONDS);
 ```
 
+#### 代码
+- [countDownLatch](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/AIO/src/main/java/aio/countDownLatch/CountDownLatchTest.java)
+
 
 # Semaphore  
 
@@ -143,12 +166,147 @@ countDownLatch.await(3L, TimeUnit.SECONDS);
 
 如果限定某些资源最多有N个线程可以访问，那么超过N个，则不允许再有线程来访问，同时当现有线程结束后，就会释放，然后允许新的线程进来。有点类似于锁的lock与 unlock过程。
 
+- Semaphore中管理着一组虚拟许可（permit），许可的初始数量可以通过构造函数来指定
 
+   1. 在执行操作时可以首先获得许可（只要还有剩余的许可），并在使用之后释放许可。
+   2. 如果没有剩余许可，那么获取许可的acquire操作将阻塞直到有许可（或者被中断、或者超时）。
+   3. 通过release方法释放一个许可信号量。
+
+- 计数信号量的一种简化形式是二值信号量，即初始值为1的Semaphore，二值信号量可以用做互斥体（mutex），并具备不可重入的加锁语义：谁拥有了这个唯一的许可，谁就拥有了互斥锁。
 #### 方法
-- 用于获取权限的acquire(),其底层实现与CountDownLatch.countdown()类似
-- 用于释放权限的release()，其底层实现与acquire()是一个互逆的过程
+
+- 用于获取许可（即信号量）acquire(),其底层实现与CountDownLatch.countdown()类似
+- 用于释放许可的release()，其底层实现与acquire()是一个互逆的过程
 
 
+### 源码
+![avatar](../../../../../../../images/Semaphore.png)
+
+Semaphore的实现依赖于其内部类Sync，Sync类继承自AQS，同时它还有两个子类NonfairSync非公平同步器以及FairSync公平同步器。
+
+- Semaphore提供了两个构造函数
+```java
+
+public Semaphore(int permits) {
+    sync = new NonfairSync(permits);
+}
+ 
+public Semaphore(int permits, boolean fair) {
+    sync = fair ? new FairSync(permits) : new NonfairSync(permits);
+}
+```
+    1. int permits:表示可用的许可证数量(最大并发数)，它也对应于AQS中的同步状态。
+    2. boolean fair:还可以控制同步器的公平性
+
+- 信号量获取
+
+acquire()方法来获取许可（即信号量）：
+
+```java
+
+public void acquire() throws InterruptedException {
+    sync.acquireSharedInterruptibly(1);
+}
+```
+
+acquireSharedInterruptibly(int)是AQS实现的模板方法，该方法会以共享响应中断的方式获取同步状态：
+```java
+public final void acquireSharedInterruptibly(int arg)
+        throws InterruptedException {
+    if (Thread.interrupted())
+        throw new InterruptedException();
+    if (tryAcquireShared(arg) < 0)
+        doAcquireSharedInterruptibly(arg);
+}
+```
+
+因为Semaphore内部有公平和非公平两种自定义同步器，所以tryAcquireShared(int)方法的实现有两种：
+        
+1. 公平锁
+```java
+
+protected int tryAcquireShared(int acquires) {
+    for (;;) {
+        // 判断当前节点是否为同步队列的首节点，保证锁的获取是公平的
+        if (hasQueuedPredecessors())
+            return -1;
+        // 获取同步状态，即剩余许可证的数量
+        int available = getState();
+        // 计算新的同步状态，即再分配acquires个许可证之后的剩余值
+        int remaining = available - acquires;
+        // 以CAS操作来设置同步状态，即修改许可证的数量
+        if (remaining < 0 ||
+            compareAndSetState(available, remaining))
+            return remaining;
+    }
+}
+```
+
+2.非公平锁
+
+```java
+protected int tryAcquireShared(int acquires) {
+    return nonfairTryAcquireShared(acquires);
+}
+final int nonfairTryAcquireShared(int acquires) {
+    for (;;) {
+        // 获取同步状态，即剩余许可证的数量
+        int available = getState();
+        // 计算新的同步状态，即再分配acquires个许可证之后的剩余值
+        int remaining = available - acquires;
+        // 以CAS操作来设置同步状态，即修改许可证的数量
+        if (remaining < 0 ||
+            compareAndSetState(available, remaining))
+            return remaining;
+    }
+}
+```
+公平与非公平的差别主要是有没有调用hasQueuedPredecessors()方法,该方法是用来**判断同步队列中当前节点是否有前驱节点**。
+如果该方法返回true，则表示有线程比当前线程更早地请求获取锁，因此要先等待前驱线程获取锁，以保证公平性。
+
+
+- 信号量释放
+
+release()方法来释放许可：
+```java
+public void release() {
+    sync.releaseShared(1);
+}
+
+//AQS实现的模板方法
+public final boolean releaseShared(int arg) {
+    if (tryReleaseShared(arg)) {
+        doReleaseShared();
+        return true;
+    }
+    return false;
+}
+
+//由Sync子类实现的方法：
+protected final boolean tryReleaseShared(int releases) {
+    for (;;) {
+        // 获取同步状态，即许可证的剩余量
+        int current = getState();
+        // 计算新的同步状态，即线程释放releases个许可证后的数量
+        int next = current + releases;
+        if (next < current) // overflow
+            throw new Error("Maximum permit count exceeded");
+        // 以CAS操作修改同步状态，即修改许可证的数量
+        if (compareAndSetState(current, next))
+            return true;
+    }
+}
+```
+
+#### Semaphore还提供了一些其他方法
+- int availablePermits()：返回此信号量中剩余许可证数
+- int getQueueLength()：返回正在等待获取许可证的线程数
+- boolean hasQueuedThreads()：判断是否有线程正在等待获取许可证
+- void reducePermits(int reductions)：减少reductions个许可证，是protected方法
+- Collection<Thread> getQueuedThreads()：返回所有等待获取许可证的线程集合，是protected方法
+
+#### 代码
+- [Semaphore](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/AIO/src/main/java/aio/countDownLatch/SemaphoreTest.java)
 
 # CyclicBarrier
 
@@ -221,3 +379,6 @@ public int await(long timeout, TimeUnit unit)
    1.  countDownLatch是一个计数器，线程完成一个记录一个，计数器递减，只能只用一次
    2.  CyclicBarrier的计数器更像一个阀门，需要所有线程都到达，然后继续执行，计数器递增，提供reset功能，可以多次使用
    3.  CyclicBarrier还提供了一些其他有用的方法，比如getNumberWaiting()方法可以获得CyclicBarrier阻塞的线程数量，isBroken()方法用来了解阻塞的线程是否被中断；
+
+#### 代码
+- [CyclicBarrier](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/AIO/src/main/java/aio/countDownLatch/CyclicBarrierTest.java)

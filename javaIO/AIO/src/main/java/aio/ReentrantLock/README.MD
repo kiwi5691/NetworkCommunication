@@ -7,7 +7,8 @@ jdk中独占锁的实现除了使用关键字synchronized外,还可以使用Reen
 
 
 # 独占锁，并且可重入
-代码
+- [代码](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/AIO/src/main/java/aio/ReentrantLock/ReentrantLockTest.java)
+
 
 ReentrantLock是可以重入的锁,当一个线程获取锁时,还可以接着重复获取多次
 
@@ -44,22 +45,28 @@ public ReentrantLock(boolean fair) {
 - 公平锁和非公平锁的实现关键在于成员变量sync的实现不同,这是锁实现互斥同步的核心
 
 - 大部分情况下我们使用非公平锁，因为其性能比公平锁好很多。但是公平锁能够避免线程饥饿
+
+- [代码](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/AIO/src/main/java/aio/ReentrantLock/ReentrantFairLockTest.java)
 ###  ReentrantLock可响应中断
 - 当使用synchronized实现锁时,阻塞在锁上的线程除非获得锁否则将一直等待下去，也就是说这种无限等待获取锁的行为无法被中断。
 - 而ReentrantLock给我们提供了一个可以响应中断的获取锁的方法lockInterruptibly()。该方法可以用来解决死锁问题。
 
-代码
+
+- [代码](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/AIO/src/main/java/aio/ReentrantLock/ReentrantLockInterruptibly.java)
 
 ### 获取锁时限时等待
 - ReentrantLock还给我们提供了获取锁限时等待的方法tryLock()
 可以选择传入时间参数,表示等待指定的时间,无参则表示立即返回锁申请的结果:true表示获取锁成功,false表示获取锁失败。
 - 可以使用该方法配合失败重试机制来更好的解决死锁问题。
 
-更好的解决死锁的代码
+
+- [更好的解决死锁的代码](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/AIO/src/main/java/aio/ReentrantLock/ReentrantTryLockTest.java)
 
 #  结合Condition实现等待通知机制
 - 使用synchronized结合Object上的wait和notify方法可以实现线程间的等待通知机制。
 - ReentrantLock结合Condition接口同样可以实现这个功能。而且相比前者使用起来更清晰也更简单。
+
+- [代码](https://github.com/kiwi5691/NetworkCommunication/blob/master/javaIO/AIO/src/main/java/aio/ReentrantLock/ConditionTest.java)
 
 ### Condition接口提供的基本方法
 
