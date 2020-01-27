@@ -88,3 +88,8 @@ ServerSocketChannel和SocketChannel都是SelectableChannel的子类
 ![avatar](../../images/Selector.png)
 
 调用Selector的select()或者 selectNow() 方法它只会返回有数据读取的SelectableChannel的实例.
+
+
+
+#### NIO bug
+epoll bug ,导致Selector空轮询，最终导致cpu 100%

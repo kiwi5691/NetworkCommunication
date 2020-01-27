@@ -11,6 +11,7 @@
     <modules>
         <module>javaIO</module>
         <module>linuxIO</module>
+        <module>netty</module>
     </modules>
 
 

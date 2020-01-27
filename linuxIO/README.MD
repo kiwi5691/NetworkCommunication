@@ -44,6 +44,13 @@
 
 
 ## IO multiplexing(IO复用)
+
+- select：仅返回有无事件不返回具体事件Id，只能监控1024个连接，线程不安全
+- poll：连接数无限制
+- epoll：返回具体事件Id，线程安全
+
+
+
 - IO复用的好处是我们可以通过(select/poll/epoll)一个时刻处理多个文件描述符
   
  ![avatar](../images/multiplexing.jpg)

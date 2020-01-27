@@ -40,6 +40,10 @@
 
 - [AIO代码和分析](https://github.com/kiwi5691/NetworkCommunication/tree/master/javaIO/AIO/src/main/java/aio)
 
+#### Reactor设计模式
+
+- [AIO概念](https://github.com/kiwi5691/NetworkCommunication/tree/master/javaIO/AIO)
+
 #### java.util.concurrent
 IO网络编程涉及到了许多多线程编程，这里是java.util.concurrent包下顺序下来的阅读笔记目录
 
@@ -50,4 +54,15 @@ IO网络编程涉及到了许多多线程编程，这里是java.util.concurrent�
 - [CountDownLatch|Semaphore|CyclicBarrier](https://github.com/kiwi5691/NetworkCommunication/tree/master/javaIO/AIO/src/main/java/aio/countDownLatch)
 
 
+#### 四种IO模型对比
 
+![avatar](../../images/4io.png)
+
+#### Netty|NIO
+
+- NIO服务端需要能够处理网络的闪断，客户端的重复接入，客户端的安全验证，消息的编解码，半包读写等。
+- 如果出现生产环境问题，会导致跨节点的服务调用中断，严重的话导致整个集群环境不可用，需要重启服务器
+
+`NIO采用了异步非阻塞编程模型，而且是一个I/O线程处理多条链路，调试以及跟踪麻烦`
+
+# Netty
