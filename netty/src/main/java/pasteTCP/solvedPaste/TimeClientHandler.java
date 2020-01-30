@@ -38,7 +38,7 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx,Object msg) throws Exception{
-
+//msg已经解码成字符串之后的应答消息了
         String body = (String)msg;
         System.out.println("NOW is :" + body +"; the counter is:"+ ++counter);
     }

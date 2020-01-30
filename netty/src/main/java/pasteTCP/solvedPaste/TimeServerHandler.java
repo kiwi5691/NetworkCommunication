@@ -14,6 +14,7 @@ public class TimeServerHandler extends ChannelHandlerAdapter{
     @Override
     public void channelRead(ChannelHandlerContext ctx,Object msg) throws Exception{
 
+        //不需要对请求消息进行编码。也不需要处理读半包问题
         String body = (String)msg;
         System.out.println("the time server receive order:"+body + ";the counter is:" + ++counter);
         String currentTime = "query time order".equalsIgnoreCase(body)? new Date().toString():"BAD ORDER";
