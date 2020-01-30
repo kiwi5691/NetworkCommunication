@@ -66,3 +66,19 @@ IO网络编程涉及到了许多多线程编程，这里是java.util.concurrent�
 `NIO采用了异步非阻塞编程模型，而且是一个I/O线程处理多条链路，调试以及跟踪麻烦`
 
 # Netty
+
+- netty测试用例
+
+- 未处理TCP粘包，拆包情况
+
+- 解决TCP粘包
+   1. LineBasedFrameDecoder
+   2. FixedLengthFrameDecoder 
+   3. DelimiterBasedFrameDecoder
+  
+- 主流编解码框架(序列化)
+   1.  基于java
+   2. Google Protobuf
+   3. Jboss Marshalling
+   
+- 多协议
