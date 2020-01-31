@@ -67,18 +67,24 @@ IO网络编程涉及到了许多多线程编程，这里是java.util.concurrent�
 
 # Netty
 
-- netty测试用例
+- [netty测试用例](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/testNetty)
 
-- 未处理TCP粘包，拆包情况
+- [未处理TCP粘包，拆包情况](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/pasteTCP)
 
 - 解决TCP粘包
-   1. LineBasedFrameDecoder
-   2. FixedLengthFrameDecoder 
-   3. DelimiterBasedFrameDecoder
+   1. [LineBasedFrameDecoder](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/pasteTCP/solvedPaste)
+   2. [FixedLengthFrameDecoder](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/pasteTCP/FixedLengthFrameDecoder)
+   3. [DelimiterBasedFrameDecoder](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/pasteTCP/delimiterBasedFrameDecoder)
   
 - 主流编解码框架(序列化)
-   1.  基于java
-   2. Google Protobuf
-   3. Jboss Marshalling
+
+   [编解码技术](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/pasteTCP/decoder)
+   1.  [基于java](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/pasteTCP/decoder/pojo)
+   2. [Google Protobuf](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/pasteTCP/decoder/Protobuf)
+   3. [Jboss Marshalling](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/pasteTCP/decoder/jboss)
    
 - 多协议
+    
+   1. [http](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/protocol/fileServer)
+   2. [http+xml](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/protocol/fileServer/xml)
+   
