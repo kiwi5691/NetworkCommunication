@@ -169,12 +169,12 @@ public class HttpFileServerHandler extends
             uri = URLDecoder.decode(uri, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             try {
-                //判断URI与允许访问的URI一致or其子目录（文件），则校验通过
                 uri = URLDecoder.decode(uri, "ISO-8859-1");
             } catch (UnsupportedEncodingException e1) {
                 throw new Error();
             }
         }
+        //判断URI与允许访问的URI一致or其子目录（文件），则校验通过
         if (!uri.startsWith(url)) {
             return null;
         }

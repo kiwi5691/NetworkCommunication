@@ -32,5 +32,16 @@
             <artifactId>jboss-marshalling-serial</artifactId>
             <version>1.4.11.Final</version>
         </dependency>
+        <dependency>
+        <groupId>org.jibx</groupId>
+        <artifactId>jibx-run</artifactId>
+        <version>1.2.6</version>
+        </dependency>
+        <dependency>
+        <groupId>org.jibx</groupId>
+        <artifactId>jibx-extras</artifactId>
+        <version>1.2.6</version>
+        </dependency>
     </dependencies>
+
 </project>
