@@ -112,3 +112,26 @@ public class HttpXmlRequestDecoder extends
 ```java
 public abstract class AbstractHttpXmlEncoder<T> extends
 ```
+
+- HTTP+XML响应消息编码类
+
+对于响应，它将业务处理后的POJO对象丢给HTTP+XML协议栈，由基础的协议栈进行后续的处理。为了降低业务定制开发的难度，首先封装一个全新的HTTP XML应答对象。
+
+1. HttpXmlResponse
+
+它由两个成员对象 FullHttpResponse， Object ，Object就是业务需要发送的应答POJO对象
+
+2. HttpXmlRequestEncoder 应答消息编码类
+
+```java
+public class HttpXmlRequestEncoder extends
+	AbstractHttpXmlEncoder<HttpXmlRequest> 
+``` 
+
+3. HttpXmlResponseDecoder 应答消息解码类
+
+```java
+public class HttpXmlResponseDecoder extends
+	AbstractHttpXmlDecoder<DefaultFullHttpResponse> 
+```
+客户端收到Http+xml应答消息后，对消息进行解码，获取HttpXmlResponse对象

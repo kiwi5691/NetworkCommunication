@@ -50,8 +50,10 @@ public class HttpXmlClient {
 			@Override
 			public void initChannel(SocketChannel ch)
 				throws Exception {
+			 //HttpResponseDecoder它负责将二进制码流解码成HTTP的应答消息
 			    ch.pipeline().addLast("http-decoder",
 				    new HttpResponseDecoder());
+			    //HttpObjectAggregator它负责将1个HTTP请求消息的多个部分合并成一条完整的HTTP消息
 			    ch.pipeline().addLast("http-aggregator",
 				    new HttpObjectAggregator(65536));
 			    // XML解码器

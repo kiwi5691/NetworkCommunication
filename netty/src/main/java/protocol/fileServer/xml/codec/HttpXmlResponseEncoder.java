@@ -46,15 +46,20 @@ public class HttpXmlResponseEncoder extends
 	    List<Object> out) throws Exception {
 	ByteBuf body = encode0(ctx, msg.getResult());
 	FullHttpResponse response = msg.getHttpResponse();
+	//对应答消息进行判断，如果业务侧已经构造了HTTP应答消息，则利用业务已有的应答消息重新复制一个新的HTTP应答消息
 	if (response == null) {
+		//无法重用业务测自定义HTTP应答消息的主要原因，是因为Netty的DefaultFullHttpResponse没有提供动态设置消息体content的接口，
+		// 只能在第一次构造的时候设置内容
 	    response = new DefaultFullHttpResponse(HTTP_1_1, OK, body);
 	} else {
 	    response = new DefaultFullHttpResponse(msg.getHttpResponse()
 		    .getProtocolVersion(), msg.getHttpResponse().getStatus(),
 		    body);
 	}
+	//设置消息体内容格式为text/xml。然后在消息头中设置消息体的长度。
 	response.headers().set(CONTENT_TYPE, "text/xml");
 	setContentLength(response, body.readableBytes());
+	//把编码后的DefaultFullHttpResponse对象添加到编码结果列表中，由后续Netty的Http编码类进行二次编码
 	out.add(response);
     }
 }

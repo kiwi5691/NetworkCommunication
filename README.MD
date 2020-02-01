@@ -88,3 +88,6 @@ IO网络编程涉及到了许多多线程编程，这里是java.util.concurrent�
    1. [http](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/protocol/fileServer)
    2. [http+xml](https://github.com/kiwi5691/NetworkCommunication/tree/master/netty/src/main/java/protocol/fileServer/xml)
    
+   - WebSocket
+   1. http协议的弊端
+   2. webSocket使用
