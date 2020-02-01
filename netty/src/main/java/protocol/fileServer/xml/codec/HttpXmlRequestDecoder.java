@@ -49,10 +49,12 @@ public class HttpXmlRequestDecoder extends
     @Override
     protected void decode(ChannelHandlerContext arg0, FullHttpRequest arg1,
 	    List<Object> arg2) throws Exception {
+    	//先对HTTP请求消息本身的解码结果进行判断，如果失败，那么再次对消息体进行二次解码已经没意义
 	if (!arg1.getDecoderResult().isSuccess()) {
 	    sendError(arg0, BAD_REQUEST);
 	    return;
 	}
+	//这里通过HttpXmlRequest和序列化后的ORDER对象构造HttpXMLRequest实例，最后添加到解码结果List列表中
 	HttpXmlRequest request = new HttpXmlRequest(arg1, decode0(arg0,
 		arg1.content()));
 	arg2.add(request);
@@ -60,6 +62,7 @@ public class HttpXmlRequestDecoder extends
 
     private static void sendError(ChannelHandlerContext ctx,
 	    HttpResponseStatus status) {
+    	//如果解码失败，则构造异常的HTTP应答消息返回给客户端
 	FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1,
 		status, Unpooled.copiedBuffer("Failure: " + status.toString()
 			+ "\r\n", CharsetUtil.UTF_8));

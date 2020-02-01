@@ -53,8 +53,10 @@ public abstract class AbstractHttpXmlDecoder<T> extends
 
     protected Object decode0(ChannelHandlerContext arg0, ByteBuf body)
 	    throws Exception {
+    	//从HTTP消息体中获取请求码流，然后通过JiBx类库将XML转换为POJO
 	factory = BindingDirectory.getFactory(clazz);
 	String content = body.toString(UTF_8);
+	//最后根据码流开关决定是否打印消息体码流。增加码流开关是为了方便定位，在实际项目中需要打印到日志中
 	if (isPrint)
 	    System.out.println("The body is : " + content);
 	reader = new StringReader(content);
@@ -76,6 +78,7 @@ public abstract class AbstractHttpXmlDecoder<T> extends
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
 	    throws Exception {
+    	//如果解码发生异常，要判断StringReader是否已经关闭，如果没有关闭，则关闭输入流并通知JVM对其进行垃圾回收
 	// 释放资源
 	if (reader != null) {
 	    reader.close();

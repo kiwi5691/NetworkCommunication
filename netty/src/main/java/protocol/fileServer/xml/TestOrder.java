@@ -38,11 +38,15 @@ public class TestOrder {
     private final static String CHARSET_NAME = "UTF-8";
 
     private String encode2Xml(Order order) throws JiBXException, IOException {
-	factory = BindingDirectory.getFactory(Order.class);
+	//根据Order的CLass构造BindingFactory对象
+    factory = BindingDirectory.getFactory(Order.class);
+    //构造新的StringWriter对象
 	writer = new StringWriter();
+	//通过IBingFactory构造Marshallling上下文，最后通过MarshallingDocument将Order序列化为StringWriter
 	IMarshallingContext mctx = factory.createMarshallingContext();
 	mctx.setIndent(2);
 	mctx.marshalDocument(order, CHARSET_NAME, null, writer);
+	//通过StringWriter的toString方法可返回String类型的XML对象
 	String xmlStr = writer.toString();
 	writer.close();
 	System.out.println(xmlStr.toString());
